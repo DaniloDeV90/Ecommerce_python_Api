@@ -1,0 +1,8 @@
+{
+    "python.analysis.extraPaths": [
+        "./Ecommerce/EcommerceProject/serializers/User",
+        "./Ecommerce/EcommerceProject/serializers/User",
+        "./Ecommerce/EcommerceProject/views/Endereco",
+        "./Ecommerce/EcommerceProject/views/User"
+    ]
+}
