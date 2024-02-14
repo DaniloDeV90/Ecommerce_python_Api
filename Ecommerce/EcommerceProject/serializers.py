@@ -1,16 +1,10 @@
 
 
-from .models import Endereco
+from .models import Categoria, Endereco
 from rest_framework import serializers
-from .models import User,CarrinhoDeCompras
-from .CustomError import MyCustomError
+from .models import User,CarrinhoDeCompras, ItemDeCarrinho, Produto
 
 
-
-class CarrinhoCreateSerializer (serializers.ModelSerializer):
-    class Meta:
-        model = CarrinhoDeCompras
-        fields = '__all__'
 
 
 
@@ -35,14 +29,12 @@ class UserCreateSerializer (serializers.ModelSerializer):
 
 
 
-    def nome_sobrenome_unico (self, data ):
-    
-
-        if User.objects.filter (nome = data['nome'], sobrenome = data['sobrenome']).first ():
-         raise  serializers.ValidationError ("Já existe usuario com esse nome e sobrenome")
 
 
-
+class UserLoginSerializer(serializers.ModelSerializer):
+    class Meta:
+        model  = User
+        fields =  ['senha','email']
 
 
 
@@ -52,23 +44,32 @@ class UserDeleteSerializer(serializers.Serializer):
         fields = ['id']
 
 
-    def deleteUser (self,data):
-      try:
-        print (data)
+class CarrinhoSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = CarrinhoDeCompras
+        fields = '__all__'
 
-    
-        user = User.objects.get (id=data)
-        print(user)
-        if user:
-            user.delete ()
-            return
-    
-    
-      except Exception  as e:
-        
-        if (isinstance (e, User.DoesNotExist)):
-          
-            raise  serializers.ValidationError  ("Este User não existe!")
-        raise serializers.ValidationError ("Erro interno")
 
  
+
+class ProdutosSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = Produto
+        fields = '__all__'
+def get_categoria_nome (self,instance):
+    return instance.get_categoria_nome()
+
+
+
+class ItensSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = ItemDeCarrinho
+        fields = '__all__'
+
+        
+class CategoriaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Categoria
+        fields = '__all__'
+
+    

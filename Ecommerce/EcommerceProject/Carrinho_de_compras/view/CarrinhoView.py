@@ -1,13 +1,13 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from ...serializers import CarrinhoCreateSerializer
+from ...serializers import CarrinhoSerializer
 
 
 
 @api_view(['POST'])
 def criar_carrinho (request):
-        serializerCarrinho = CarrinhoCreateSerializer(data=request.data)
+        serializerCarrinho = CarrinhoSerializer(data=request.data)
         
         if serializerCarrinho.is_valid():
             serializerCarrinho.save()
