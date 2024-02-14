@@ -64,23 +64,18 @@ class FindUser(APIView):
     def get(self, request):
         try:
             
-            id_carrinho = request.session.get("carrinhoid")
+           
             id_user = request.session.get ("userid")
 
             user = User.objects.get (id=id_user)
             
           
-            item_carrinho = ItemDeCarrinho.objects.filter(carrinho_id=id_carrinho)
-            produtos_associados = []      
-            for item in item_carrinho:
-                
-                produtos_associados.append(item.produto)
       
-
-            produto_serializer = ProdutosSerializer(produtos_associados, many=True)
+        
+  
         
          
-            return Response({'nome': user.nome,'sobrenome':user.sobrenome, 'email': user.email,  'carrinho': produto_serializer.data})
+            return Response({'nome': user.nome,'sobrenome':user.sobrenome, 'email': user.email})
             
         except Exception as e:
             return Response("ERRO: " + str(e))
@@ -131,9 +126,8 @@ class CreateItems (APIView):
   def post (self,request):
     try:
 
-      idcarrinho = request.session.get ("carrinhoid")
+
       data = request.data.copy()
-      data['carrinho'] = idcarrinho
       itensSerializer = ItensSerializer (data=data)
       if itensSerializer.is_valid():
        itensSerializer.save ()
@@ -141,3 +135,22 @@ class CreateItems (APIView):
       return Response("erro ae")
     except Exception as e:
       return Response ("Erro ae")
+
+
+class FindCarrinho (APIView):
+  def get (self,request):
+      
+        idcarrinho = request.session.get ("carrinhoid")
+        item_carrinho = ItemDeCarrinho.objects.filter(carrinho_id=idcarrinho)
+        produtos_associados = []      
+        for item in item_carrinho:
+          produtos_info = {
+              "produto": item.produto.nome,
+              "categorias": item.produto.get_categoria_nome (),
+              "quantidade": item.quantidade
+            }
+          produtos_associados.append (produtos_info)
+
+        
+        return  Response ({"carrinho":produtos_associados})
+

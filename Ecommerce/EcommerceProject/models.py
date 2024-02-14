@@ -35,11 +35,9 @@ class Produto (models.Model):
 
     nome  = models.CharField (max_length = 100, null=False )
     categoriaId = models.ManyToManyField (Categoria)
-def __str__(self):
-        return f"Item: {self.nome} (Quantidade: {self.quantidade})"
 
-def get_categoria_nome(self):
-        return f"Item: {self.nome} (Quantidade: {self.categoriaId.values_list ('nome', flat=True)})"
+    def get_categoria_nome(self):
+        return self.categoriaId.values_list ('nome', flat=True)
 
 
 
