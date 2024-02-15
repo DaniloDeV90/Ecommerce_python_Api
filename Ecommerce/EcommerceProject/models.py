@@ -1,13 +1,7 @@
 from django.db import models
 from django.db.models import UniqueConstraint
+from django.core.validators import MinValueValidator
 
-
-
-
-
-
-
-   
 
 
 
@@ -35,7 +29,7 @@ class Produto (models.Model):
 
     nome  = models.CharField (max_length = 100, null=False )
     categoriaId = models.ManyToManyField (Categoria)
-
+    preco = models.FloatField (default=0.0, validators=[MinValueValidator (0.0)], null=False)
     def get_categoria_nome(self):
         return self.categoriaId.values_list ('nome', flat=True)
 

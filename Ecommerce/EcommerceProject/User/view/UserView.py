@@ -5,9 +5,34 @@ from rest_framework import status
 from rest_framework.response import Response
 from django.db.utils import IntegrityError
 from  ...models import User, CarrinhoDeCompras, ItemDeCarrinho,Categoria, Produto
-from  ...serializers import UserCreateSerializer,CarrinhoSerializer, ItemDeCarrinho, ProdutosSerializer, CategoriaSerializer, ItensSerializer
+from  ...serializers import UserCreateSerializer,CarrinhoSerializer, ItemDeCarrinho, ProdutosSerializer, CategoriaSerializer, ItensSerializer,EnderecoSerializer
 from rest_framework.views import APIView
+from ...EnumResponseRequest import HttpStatus
 
+
+class Createendereco (APIView):
+
+  def post (self,request):
+    try:
+     idUser = request.session.get ("userid")
+    
+     data = request.data.copy()
+     data['usuario']= idUser
+     
+     enderecoSerializer = EnderecoSerializer (data=data)
+     if enderecoSerializer.is_valid ():
+        enderecoSerializer.save ()
+     else:
+        raise IntegrityError ()
+     
+
+    
+     return  Response ("endereco criado")
+      
+    except Exception as e:
+        if (isinstance (e, IntegrityError)):
+          return Response ("Endereco ja cadastrado!", status=HttpStatus.CONFLITO.value)
+        return Response (e)
 
 class Create_User (APIView):
 
@@ -147,7 +172,8 @@ class FindCarrinho (APIView):
           produtos_info = {
               "produto": item.produto.nome,
               "categorias": item.produto.get_categoria_nome (),
-              "quantidade": item.quantidade
+              "quantidade": item.quantidade,
+              "preco": item.produto.preco
             }
           produtos_associados.append (produtos_info)
 

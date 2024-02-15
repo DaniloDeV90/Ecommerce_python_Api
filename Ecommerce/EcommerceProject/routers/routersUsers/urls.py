@@ -1,9 +1,10 @@
 from django.urls import path
-from  ...User.view.UserView import Create_User,Account,Login,FindUser,CreateProduct,CreateCategory,CreateItems, FindCarrinho
+from  ...User.view.UserView import Create_User,Account,Login,FindUser,CreateProduct,CreateCategory,CreateItems, FindCarrinho,Createendereco
 
 
 urlpatterns = [
     path('', Create_User.as_view (), name='criar_usuario'),
+    path ('criarendereco/',Createendereco.as_view (), name='criarEndereco'),
     path  ('find/',FindUser.as_view (), name='trazer_usuario'),
     path ('createProduct/',CreateProduct.as_view (), name="criarproduto" ),
     path ('deletar/<int:user_id>/', Account.as_view (), name='deletar_usuario'),
